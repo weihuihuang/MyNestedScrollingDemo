@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="NestedScrollViewDispatchEvent">
+        <attr name="is_head_view" format="boolean"></attr>
+        <attr name="is_scroll_view" format="boolean"></attr>
+    </declare-styleable>
+    
+</resources>
