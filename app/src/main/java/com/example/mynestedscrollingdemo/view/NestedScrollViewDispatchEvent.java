@@ -43,7 +43,16 @@ public class NestedScrollViewDispatchEvent extends LinearLayout {
                 int diffY = mLastY - y;
                 if(Math.abs(diffY) >= ViewConfiguration.get(getContext()).getScaledTouchSlop()){
                     if (diffY > 0) { //上滑
-                        return isHeadViewVisible || getScrollY() == 0;
+                        boolean isCompleteVisible = false;
+                        if(scrollView instanceof RecyclerView){
+                            RecyclerView recyclerView = (RecyclerView)scrollView;
+                            if(recyclerView.getLayoutManager() instanceof LinearLayoutManager){
+                                LinearLayoutManager manager = (LinearLayoutManager)recyclerView.getLayoutManager();
+                                int position = manager.findLastVisibleItemPosition();
+                                isCompleteVisible = position == manager.getItemCount() - 1;
+                            }
+                        }
+                        return (isHeadViewVisible || getScrollY() == 0) && !isCompleteVisible;
                     }
                     if (diffY < 0) {
                         if(scrollView != null){
@@ -138,8 +147,9 @@ public class NestedScrollViewDispatchEvent extends LinearLayout {
         int parentMeasureHeight = getMeasuredHeight();
         if(headView != null && scrollView != null){
             ViewGroup.LayoutParams params = scrollView.getLayoutParams();
-            params.height = parentMeasureHeight + headView.getMeasuredHeight();
+            params.height = scrollView.getMeasuredHeight() + headView.getMeasuredHeight();
             scrollView.setLayoutParams(params);
+            parentMeasureHeight += headView.getMeasuredHeight();
         }
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), parentMeasureHeight);
     }

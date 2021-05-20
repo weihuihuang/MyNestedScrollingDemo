@@ -3,6 +3,7 @@ package com.example.mynestedscrollingdemo.view;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +15,7 @@ import com.example.mynestedscrollingdemo.R;
 public class NestedScrollViewParent2 extends LinearLayout implements NestedScrollingParent2 {
 
     private View topView;
+    private View scrollView;
     private int topViewHeight;
 
     private NestedScrollingParentHelper scrollingParentHelper = new NestedScrollingParentHelper(this);
@@ -68,6 +70,14 @@ public class NestedScrollViewParent2 extends LinearLayout implements NestedScrol
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int parentMeasureHeight = getMeasuredHeight();
+        if(topView != null && scrollView != null){
+            ViewGroup.LayoutParams params = scrollView.getLayoutParams();
+            params.height = scrollView.getMeasuredHeight() + topView.getMeasuredHeight();
+            scrollView.setLayoutParams(params);
+            parentMeasureHeight += topView.getMeasuredHeight();
+        }
+        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), parentMeasureHeight);
     }
 
     @Override
@@ -93,5 +103,6 @@ public class NestedScrollViewParent2 extends LinearLayout implements NestedScrol
     protected void onFinishInflate() {
         super.onFinishInflate();
         topView = findViewById(R.id.top_view);
+        scrollView = findViewById(R.id.recycler_view);
     }
 }

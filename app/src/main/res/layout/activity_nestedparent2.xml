@@ -9,7 +9,7 @@
         android:id="@+id/top_view"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:text="Hello World!"
+        android:text="NestedScrollViewParent2"
         android:gravity="center"
         android:textColor="#FFFFFF"
         android:background="#9aa1ab" />
